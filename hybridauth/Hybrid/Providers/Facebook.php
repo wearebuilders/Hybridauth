@@ -205,6 +205,46 @@ class Hybrid_Providers_Facebook extends Hybrid_Provider_Model {
 
        return $wrpages;
     }
+    
+    /**
+     * @param bool $writableonly
+     * @return array
+     * @throws \Exception
+     */
+    function getUserPagesWithInstagramBusinessProfile($writableonly = false)
+    {
+        if (( isset($this->config['scope']) && strpos($this->config['scope'], 'manage_pages') === false ) || (!isset($this->config['scope']) && strpos($this->scope, 'manage_pages') === false ))
+            throw new Exception("User status requires manage_page permission!");
+        
+        try {
+            $pages = $this->api->get("me/accounts?fields=id,name,instagram_business_account", $this->token('access_token'));
+            $pages = $pages->getDecodedBody();
+        } catch (FacebookApiException $e) {
+            throw new Exception("Cannot retrieve user pages! {$this->providerId} returned an error: {$e->getMessage()}", 0, $e);
+        }
+        
+        if (!isset($pages['data'])) {
+            return array();
+        }
+        
+        // make sure that we only return pages with an instagram business account attached to it.
+        $pages['data'] = array_filter($pages['data'], function($value) {
+            return is_array($value) && isset($value['instagram_business_account']) && isset($value['instagram_business_account']['id']);
+        });
+        
+        if (!$writableonly) {
+            return $pages['data'];
+        }
+        
+        $wrpages = array();
+        foreach ($pages['data'] as $p) {
+            if (isset($p['perms']) && in_array('CREATE_CONTENT', $p['perms'])) {
+                $wrpages[] = $p;
+            }
+        }
+        
+        return $wrpages;
+    }
 
     /**
      * {@inheritdoc}
