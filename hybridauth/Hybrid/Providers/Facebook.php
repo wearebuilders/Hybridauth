@@ -217,7 +217,7 @@ class Hybrid_Providers_Facebook extends Hybrid_Provider_Model {
             throw new Exception("User status requires manage_page permission!");
         
         try {
-            $pages = $this->api->get("me/accounts?fields=id,name,category,connected_instagram_account,access_token", $this->token('access_token'));
+            $pages = $this->api->get("me/accounts?fields=id,name,category,instagram_business_account,access_token", $this->token('access_token'));
             $pages = $pages->getDecodedBody();
         } catch (FacebookApiException $e) {
             throw new Exception("Cannot retrieve user pages! {$this->providerId} returned an error: {$e->getMessage()}", 0, $e);
