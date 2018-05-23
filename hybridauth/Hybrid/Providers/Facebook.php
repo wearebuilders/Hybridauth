@@ -207,6 +207,7 @@ class Hybrid_Providers_Facebook extends Hybrid_Provider_Model {
     }
     
     /**
+     *
      * @param bool $writableonly
      * @return array
      * @throws \Exception
