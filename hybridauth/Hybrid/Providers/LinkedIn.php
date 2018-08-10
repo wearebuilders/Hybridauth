@@ -35,7 +35,8 @@ class Hybrid_Providers_LinkedIn extends Hybrid_Provider_Model_OAuth2 {
         if (is_array($this->scope)) {
             $this->scope = implode(" ", $this->scope);
         }
-        parent::loginBegin();
+        // redirect the user to the provider authentication url
+        Hybrid_Auth::redirect($this->api->authorizeUrl(array("state" => md5(time()), "scope" => $this->scope)));
     }
 
     /**
