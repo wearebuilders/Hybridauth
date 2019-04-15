@@ -28,7 +28,7 @@ class Hybrid_Provider_Model_OAuth2 extends Hybrid_Provider_Model {
 
   /**
    * Provider API wrapper
-   * @var OAuth2Client 
+   * @var OAuth2Client
    */
   public $api = null;
 
@@ -99,7 +99,7 @@ class Hybrid_Provider_Model_OAuth2 extends Hybrid_Provider_Model {
    */
   function loginBegin() {
     // redirect the user to the provider authentication url
-    Hybrid_Auth::redirect($this->api->authorizeUrl(array("scope" => $this->scope)));
+    Hybrid_Auth::redirect($this->api->authorizeUrl(array("hl" => "en", "scope" => $this->scope)));
   }
 
   /**
